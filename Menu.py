@@ -16,7 +16,7 @@ class Menu:
         self.title_y = 150
         self.title_y_velocity = 0.20
         # load screen and images for background
-        self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+        self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
         self.background = pygame.image.load('Images/backgrounds/space-backgound.png').convert_alpha()
         self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
         stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
@@ -30,26 +30,30 @@ class Menu:
         self.clock = pygame.time.Clock()
 
         self.running = True
-        self.playButton = Button((WIN_WIDTH/2 - 130, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "PLAY")
-        self.shipSelect = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2), (100, 100), WHITE, "SHIP", 'Images/ships/ship-a/ship-a-damaged.png')
-        self.exitButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 150), (100, 100), WHITE, "EXIT")
-        self.statButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 300), (100, 100), WHITE, "STATS")
-        self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
-        self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
 
-        
+    def resize_window(self, new_width, new_height):
+        """Update global dimensions and rescale elements."""
+        global WIN_WIDTH, WIN_HEIGHT
+        min_size = 800
+        new_width = max(new_width, min_size)
+        new_height = max(new_height, min_size)
+        WIN_WIDTH, WIN_HEIGHT = new_width, new_height
+
+        self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
+
+        # Rescale the images
+        self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
+        self.bg_stars = pygame.transform.scale(self.bg_stars, (WIN_WIDTH, WIN_HEIGHT))
+
+        # Update button positions dynamically based on new size
+        self.draw() 
+
     def draw(self):
         self.screen.blit(self.background, (0,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x1 ,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x2 ,0))
         
-        self.title_y += self.title_y_velocity
-        if self.title_y >= WIN_HEIGHT - 635:
-            self.title_y = WIN_HEIGHT - 635  # Limit the title's position to the bottom of the screen
-            self.title_y_velocity = -0.20  # Reverse direction when reaching bottom
-        elif self.title_y <= 150:
-            self.title_y = 150  # Limit the title's position to the top of the screen
-            self.title_y_velocity = 0.20 
+        self.title_y = int(WIN_HEIGHT * 0.2)  # Fixed position above the buttons
 
         # Add the following lines
         title_rect = self.title_text.get_rect(center=(WIN_WIDTH/2, self.title_y)) 
@@ -57,6 +61,13 @@ class Menu:
 
         self.clock.tick(FPS) #update the screen based on FPS
         pygame.mouse.set_visible(True)
+
+        self.playButton = Button((int(WIN_WIDTH * 0.45), int(WIN_HEIGHT * 0.3)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "PLAY")
+        self.shipSelect = Button((int(WIN_WIDTH * 0.45), int(WIN_HEIGHT * 0.42)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "SHIP", 'Images/ships/ship-a/ship-a-damaged.png')
+        self.exitButton = Button((int(WIN_WIDTH * 0.45),int(WIN_HEIGHT * 0.54)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "EXIT")
+        self.statButton = Button((int(WIN_WIDTH * 0.45), int(WIN_HEIGHT * 0.66)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "STATS")
+        self.instructionsButton = Button((int(WIN_WIDTH * 0.8), int(WIN_HEIGHT * 0.78)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "Help")
+        self.coOpButton = Button((int(WIN_WIDTH * 0.45), int(WIN_HEIGHT * 0.78)), (int(WIN_WIDTH * 0.12), int(WIN_HEIGHT * 0.1)), WHITE, "CO-OP")
         
         self.playButton.draw(self.screen, BLACK)
         self.shipSelect.draw(self.screen, BLACK)
@@ -97,6 +108,8 @@ class Menu:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
+                elif event.type == pygame.VIDEORESIZE:
+                    self.resize_window(event.w, event.h)
 
                 if self.playButton.is_clicked(event):
                         g = Game(selected_ship) #init Game class

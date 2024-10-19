@@ -3,8 +3,9 @@ pygame.init()
 
 WIN_WIDTH = 800
 WIN_HEIGHT = 800
+MIN_SIZE = 800
 # create "scree" that way we can load our images here once
-screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+screen = pygame.display.set_mode((max(WIN_WIDTH, MIN_SIZE), max(WIN_HEIGHT, MIN_SIZE)), pygame.RESIZABLE)
 
 TILESIZE = 16
 #42 by 42 tile size
