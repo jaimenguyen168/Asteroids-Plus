@@ -30,7 +30,7 @@ class Game:
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
 
-        
+        # self.button_rect = None  # Initialize button_rect
 
         # all variables for the ship class
         self.game_timer = 0
@@ -77,8 +77,6 @@ class Game:
 
         self.player = Player(self, (WIN_WIDTH/TILESIZE)/2, (WIN_HEIGHT/TILESIZE)/2, ship_image_list)
 
-
-    
     def events(self):
         for event in pygame.event.get():
             #when you x-out of window, game quits
@@ -202,6 +200,19 @@ class Game:
         # Draw the lives text
         self.screen.blit(lives_text, (10, 10))
         self.screen.blit(score_text, (10,40))
+
+        # Define the exit button's rectangle at the bottom right corner
+        button_width = 100
+        button_height = 50
+        button_rect = pygame.Rect(WIN_WIDTH - button_width - 10, WIN_HEIGHT - button_height - 10, button_width, button_height)
+
+        # Draw the exit button
+        pygame.draw.rect(self.screen, (255, 0, 0), button_rect)  # Red button
+        font = pygame.font.Font(None, 36)
+        text = font.render("Exit", True, (255, 255, 255))
+        text_rect = text.get_rect(center=button_rect.center)  # Center text on the button
+        self.screen.blit(text, text_rect)
+
         pygame.display.update()
 
     def update_background(self):
@@ -314,30 +325,53 @@ class Game:
 
         
     def main(self):
-    # Start the background music
+        # Start the background music
         MUSIC_CHANNEL.play(BACKGROUND_MUSIC, loops=-1)
 
         while self.running:
-        # Start a new game
+            # Start a new game
             self.new()
 
-        # Game loop
+            # Game loop
             while self.playing:
                 self.events()
+
+                # Draw the exit button and check if it's clicked
+                button_rect = self.draw_exit_button()
+                mouse_pos = pygame.mouse.get_pos()
+                if pygame.mouse.get_pressed()[0]:  # Check if left mouse button is pressed
+                    if button_rect.collidepoint(mouse_pos):  # Check if mouse is over the exit button
+                        option = self.show_exit_menu()  # Show the pause menu
+                        match option:
+                            case 1:  # Continue the game
+                                continue
+                            case 2:  # Restart the game
+                                self.playing = False  # Break out of the game loop, restart happens after this
+                                break
+                            case 3:  # Go to menu
+                                self.playing = False  # Break out of the game loop, go to menu
+                                self.running = False  # This will exit the game
+                                return
+
                 self.update()
                 self.draw()
                 self.player_bullets.update()
 
-            # Check for game over condition
+                # Check for game over condition
                 if self.player.lives <= 0:
                     
                     self.game_timer = 0   # Reset game time to 0:00
                     self.playing = False  # Exit the game loop
 
-        # Display game over screen
-            self.game_over_screen()
+            # If we broke out of the loop due to restart (option == 2)
+            if not self.playing and self.player.lives > 0:
+                continue  # This skips the game-over screen and starts a new game
 
-        # Wait for player input to restart or quit
+            # Display game over screen only if player's lives are <= 0
+            if self.player.lives <= 0:
+                self.game_over_screen()
+
+            # Wait for player input to restart or quit
             waiting = True
             while waiting:
                 for event in pygame.event.get():
@@ -362,3 +396,68 @@ class Game:
 
         return 0
 
+
+    """
+    The code below is being added to implement an exit interface feature.
+    This will provide the player with an option to either continue the game,
+    restart the game, or return to the main menu when they interact with the exit button.
+    """
+
+    def draw_exit_button(self):
+        # Define the exit button's rectangle at the bottom right corner
+        button_width = 80
+        button_height = 40
+        button_rect = pygame.Rect(WIN_WIDTH - button_width - 10, WIN_HEIGHT - button_height - 10, button_width, button_height)
+
+        # Draw the exit button
+        pygame.draw.rect(self.screen, (255, 50, 50), button_rect)
+        font = pygame.font.Font(None, 36)
+        text = font.render("Exit", True, (255, 255, 255))
+        text_rect = text.get_rect(center=button_rect.center)  # Center text on the button
+        self.screen.blit(text, text_rect)
+
+        return button_rect  # Return the button rect to check for collisions
+
+    def show_exit_menu(self):
+        self.screen.fill((0, 0, 0))  # Fill screen with black color
+        score_text = self.font.render("Score: " + str(self.player.score), True, (255, 255, 255))
+        continue_text = self.font.render("Press (C) to (Continue)", True, (255, 255, 255))
+        restart_text = self.font.render("Press (R) to (Restart)", True, (255, 255, 255))
+        menu_text = self.font.render("Press (Q) to (Back) to (Menu)", True, (255, 255, 255))  
+
+        # Position text on the screen
+        score_rect = score_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2-50))
+        continue_rect = continue_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+        restart_rect = restart_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 + 50))
+        menu_rect = menu_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 + 100))
+
+        # Blit text onto the screen
+        self.screen.blit(score_text, score_rect)
+        self.screen.blit(continue_text, continue_rect)
+        self.screen.blit(restart_text, restart_rect)
+        self.screen.blit(menu_text, menu_rect)
+        pygame.display.flip()
+
+        # Handle menu input
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    return 0
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:  # Continue the game
+                        return 1  # Return to continue game
+                    if event.key == pygame.K_r:  # Restart the game
+                        return 2  # Restart the game
+                    if event.key == pygame.K_q:  # Quit to menu
+                        return 3  # Quit to menu
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if continue_rect.collidepoint(event.pos):  # Continue clicked
+                        return 1
+                    if restart_rect.collidepoint(event.pos):  # Restart clicked
+                        return 2
+                    if menu_rect.collidepoint(event.pos):  # Menu clicked
+                        return 3
