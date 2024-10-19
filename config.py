@@ -1,8 +1,14 @@
 import pygame
 pygame.init()
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env
+
+BEARER_TOKEN = os.getenv("PYTHON_APP_X_BEARER_TOKEN")
 
 WIN_WIDTH = 800
-WIN_HEIGHT = 800
+WIN_HEIGHT = 600
 # create "scree" that way we can load our images here once
 screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 
