@@ -50,6 +50,9 @@ class Game:
         # update all variables
         self.spawn_timer_powerup = 0
 
+        self.milestones = [20, 400, 1000]  # Define score milestones for scaling the ship
+        self.reached_milestones = set()
+
     def new(self):
         
         #new game
@@ -151,6 +154,14 @@ class Game:
         for powerup in self.powerups:
             powerup.update()
 
+        for milestone in self.milestones:
+            if self.player.score >= milestone and milestone not in self.reached_milestones:
+                powerup = Powerups(self.all_sprites, self.player)
+                self.all_sprites.add(powerup)
+                self.powerups.add(powerup)
+                self.reached_milestones.add(milestone)
+                print("Powerup spawned new milestone reached")
+
         # create the ship based on time interval
         if self.spawn_timer_ship >= self.spawn_delay_ship * FPS:
             self.spawn_timer_ship = 0
@@ -175,8 +186,7 @@ class Game:
             self.all_sprites.add(powerup)
             self.powerups.add(powerup)
             self.spawn_timer_powerup = 0
-            
-        
+                
         
     #create background screen for game
     def draw(self):
@@ -346,9 +356,11 @@ class Game:
                             case 1:  # Continue the game
                                 continue
                             case 2:  # Restart the game
+                                self.reached_milestones.clear()
                                 self.playing = False  # Break out of the game loop, restart happens after this
                                 break
                             case 3:  # Go to menu
+                                self.player.reached_milestones.clear()
                                 self.playing = False  # Break out of the game loop, go to menu
                                 self.running = False  # This will exit the game
                                 return
@@ -382,8 +394,10 @@ class Game:
                         
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_r:  # Restart the game
+                            self.reached_milestones.clear()
                             waiting = False
                         elif event.key == pygame.K_q:  # Quit the game
+                            self.reached_milestones.clear()
                             waiting = False
                             self.running = False
                             return 0
