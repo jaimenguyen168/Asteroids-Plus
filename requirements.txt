@@ -1,3 +1,3 @@
 pygame
 python-dotenv
-newsapi-python
+requests
