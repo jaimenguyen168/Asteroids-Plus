@@ -6,6 +6,7 @@ from leaderboard import *
 from instructions import *
 from CoOp import *
 import pygame.font
+from news import *;
 
 class Menu:
     def __init__(self):
@@ -31,9 +32,10 @@ class Menu:
 
         self.running = True
         self.playButton = Button((WIN_WIDTH/2 - 130, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "PLAY")
-        self.shipSelect = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2), (100, 100), WHITE, "SHIP", 'Images/ships/ship-a/ship-a-damaged.png')
+        self.shipSelect = Button((WIN_WIDTH/2 -130, WIN_HEIGHT/2), (100, 100), WHITE, "SHIP", 'Images/ships/ship-a/ship-a-damaged.png')
         self.exitButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 150), (100, 100), WHITE, "EXIT")
         self.statButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 300), (100, 100), WHITE, "STATS")
+        self.newsButton = Button((WIN_WIDTH/2 +20, WIN_HEIGHT/2), (100, 100), WHITE, "NEWS")
         self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
         self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
 
@@ -62,6 +64,7 @@ class Menu:
         self.shipSelect.draw(self.screen, BLACK)
         self.exitButton.draw(self.screen, BLACK)
         self.statButton.draw(self.screen,BLACK)
+        self.newsButton.draw(self.screen, BLACK)
         self.instructionsButton.draw(self.screen,BLACK)
         self.coOpButton.draw(self.screen,BLACK)
     
@@ -83,6 +86,10 @@ class Menu:
     def show_instructions(self):
         inst_menu = InstructionsMenu(self.screen)
         inst_menu.run()
+        
+    def show_news(self):
+        news_menu = NewsMenu(self.screen)
+        news_menu.run()
 
     def play(self):
         selected_ship = 0
@@ -109,7 +116,10 @@ class Menu:
                     selected_ship = select.main()
                     while select.running:
                         select.main()
-
+                
+                if self.newsButton.is_clicked(event):
+                    self.show_news()
+                
                 if self.instructionsButton.is_clicked(event):
                     self.show_instructions()
 

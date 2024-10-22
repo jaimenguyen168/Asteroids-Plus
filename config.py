@@ -1,8 +1,26 @@
 import pygame
 pygame.init()
+from dotenv import load_dotenv
+import os
 
-WIN_WIDTH = 800
-WIN_HEIGHT = 800
+load_dotenv()  # Load environment variables from .env
+
+API_KEY = os.getenv("PYTHON_APP_NEWSAPI_KEY")
+BASE_URL = 'https://newsapi.org/v2/everything'
+
+# Get display information
+infoObject = pygame.display.Info()
+screen_width, screen_height = infoObject.current_w, infoObject.current_h
+print(f"Display Resolution: {screen_width}x{screen_height}")
+
+# Set window dimensions based on screen height
+if screen_height >= 800:
+    WIN_WIDTH, WIN_HEIGHT = 800, 800
+else:
+    WIN_WIDTH, WIN_HEIGHT = 800, 600
+
+print(f"Window Size: {WIN_WIDTH}x{WIN_HEIGHT}")
+
 # create "scree" that way we can load our images here once
 screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 
