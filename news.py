@@ -85,7 +85,6 @@ class NewsMenu:
     def fetch_news(self):
         params = {
             'q': '"Temple Owls" OR "Temple Football"',
-            'searc'
             'language': 'en',
             'sortBy': 'publishedAt',
             'pageSize': 10,
