@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import requests
 
 class NewsMenu:
+
     def __init__(self, screen):
         self.screen = screen
         self.running = True
@@ -67,7 +68,7 @@ class NewsMenu:
                 
             # Control visibility of each button group
             if self.initial_buttons_visible:
-                self.exitButton.draw(self.screen, BLACK)
+                self.exitButton.draw(self.screen, (128,128,128))
                 
             pygame.display.update()
 
