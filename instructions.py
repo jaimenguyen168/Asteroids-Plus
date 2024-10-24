@@ -77,20 +77,20 @@ class InstructionsMenu:
 
             # Control visibility of each button group
             if self.initial_buttons_visible:
-                self.singlebutton.draw(self.screen, BLACK)
-                self.coopbutton.draw(self.screen, BLACK)
-                self.exitButton.draw(self.screen, BLACK)
+                self.singlebutton.draw(self.screen, (128,128,128))
+                self.coopbutton.draw(self.screen, (128,128,128))
+                self.exitButton.draw(self.screen, (128,128,128))
             elif self.self_button_visible:
                 self.draw_game_buttons()
-                self.scoringButton.draw(self.screen, BLACK)
+                self.scoringButton.draw(self.screen, (128,128,128))
                 self.handle_button_click_single(event)
             elif self.coop_button_visible:
                 self.draw_game_buttons()
                 self.handle_button_click_coop(event)
             elif self.control_visible:
-                self.p1button.draw(self.screen, BLACK)
-                self.p2button.draw(self.screen, BLACK)
-                self.backbutton.draw(self.screen, BLACK)
+                self.p1button.draw(self.screen, (128,128,128))
+                self.p2button.draw(self.screen, (128,128,128))
+                self.backbutton.draw(self.screen, (128,128,128))
                 self.handle_button_click_controls(event)
             
             pygame.display.update()
@@ -195,12 +195,12 @@ class InstructionsMenu:
             self.control_visible = False
 
     def draw_game_buttons(self):
-        self.objButton.draw(self.screen, BLACK)
-        self.controlsButton.draw(self.screen, BLACK)
-        self.mechanicsButton.draw(self.screen, BLACK)
-        self.powerupsButton.draw(self.screen, BLACK)
-        self.strategyButton.draw(self.screen, BLACK)
-        self.backbutton.draw(self.screen, BLACK)
+        self.objButton.draw(self.screen, (128,128,128))
+        self.controlsButton.draw(self.screen, (128,128,128))
+        self.mechanicsButton.draw(self.screen, (128,128,128))
+        self.powerupsButton.draw(self.screen, (128,128,128))
+        self.strategyButton.draw(self.screen, (128,128,128))
+        self.backbutton.draw(self.screen, (128,128,128))
 
     def display_message(self, message):
         max_width = self.message_box_rect.width - 20  # Allow some margin for text wrapping

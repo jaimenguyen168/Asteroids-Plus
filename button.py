@@ -36,7 +36,7 @@ class Button(object):
     def draw(self, screen, color):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             self.image.fill(WHITE)
-            self.text = self.font.render(self.input_text, False, BLACK)
+            self.text = self.font.render(self.input_text, False, (128,128,128))
             self.image.blit(self.text, self.text_rect)
         else:
             self.image.fill(color)

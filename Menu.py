@@ -9,6 +9,7 @@ import pygame.font
 from news import *;
 
 class Menu:
+
     def __init__(self):
         pygame.init()
         self.title = "Asteroids   Plus"
@@ -18,8 +19,21 @@ class Menu:
         self.title_y_velocity = 0.20
         # load screen and images for background
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+
         self.background = pygame.image.load('Images/backgrounds/space-backgound.png').convert_alpha()
         self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
+
+        # add background and change background index --Jie
+        '''
+        self.backgrounds = [
+            self.background,
+            pygame.transform.scale(pygame.image.load('Images/backgrounds/background1.jpg').convert_alpha(), (WIN_WIDTH, WIN_HEIGHT)),
+            pygame.transform.scale(pygame.image.load('Images/backgrounds/background2.jpg').convert_alpha(), (WIN_WIDTH, WIN_HEIGHT)),
+            pygame.transform.scale(pygame.image.load('Images/backgrounds/background3.jpg').convert_alpha(), (WIN_WIDTH, WIN_HEIGHT))
+        ]
+        self.current_background_index = 0
+        '''
+
         stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
         self.bg_stars = pygame.transform.scale(stars_image, (WIN_WIDTH, WIN_HEIGHT))
         self.shipicon = pygame.image.load('Images/ships/ship-a/ship-a-damaged.png')
@@ -39,6 +53,10 @@ class Menu:
         self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
         self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
 
+        # add the change background button --Jie
+        '''
+        self.change_bg_button = Button((WIN_WIDTH/2 -180, WIN_HEIGHT/2 - 150), (100, 100), WHITE, 'Theme')
+        '''
         
     def draw(self):
         self.screen.blit(self.background, (0,0))
@@ -60,14 +78,18 @@ class Menu:
         self.clock.tick(FPS) #update the screen based on FPS
         pygame.mouse.set_visible(True)
         
-        self.playButton.draw(self.screen, BLACK)
-        self.shipSelect.draw(self.screen, BLACK)
-        self.exitButton.draw(self.screen, BLACK)
-        self.statButton.draw(self.screen,BLACK)
-        self.newsButton.draw(self.screen, BLACK)
-        self.instructionsButton.draw(self.screen,BLACK)
-        self.coOpButton.draw(self.screen,BLACK)
-    
+        self.playButton.draw(self.screen, (128,128,128))
+        self.shipSelect.draw(self.screen, (128,128,128))
+        self.exitButton.draw(self.screen, (128,128,128))
+        self.statButton.draw(self.screen, (128,128,128))
+        self.newsButton.draw(self.screen, (128,128,128))
+        self.instructionsButton.draw(self.screen, (128,128,128))
+        self.coOpButton.draw(self.screen, (128,128,128))
+
+        # add the change background button --Jie
+        '''
+        self.change_bg_button.draw(self.screen,BLACK)
+        '''
         pygame.display.update()
 
     def update_background(self):
@@ -90,6 +112,13 @@ class Menu:
     def show_news(self):
         news_menu = NewsMenu(self.screen)
         news_menu.run()
+
+    # change background by change background index --Jie
+    '''
+    def change_background(self):
+        self.current_background_index = (self.current_background_index + 1) % len(self.backgrounds)
+        self.background = self.backgrounds[self.current_background_index]
+    '''
 
     def play(self):
         selected_ship = 0
@@ -139,8 +168,14 @@ class Menu:
                     # exit
                     pygame.quit()
                     exit()
-        
-        
+
+                # click change background button to change the background --Jie
+                '''
+                if self.change_bg_button.is_clicked(event):
+                    self.change_background()
+                '''
+
+
 m = Menu()
 while m.running:
     m.play()
