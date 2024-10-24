@@ -48,24 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.player_bullets = self.game.player_bullets
         
         self.score = 0
-    
-    # def check_score_and_scale(self):
-    #     """Check score milestones and scale the player's ship size accordingly."""
-    #     for milestone in self.milestones:
-    #         if self.score >= milestone and milestone not in self.reached_milestones:
-    #             # Increase player ship size at each milestone
-    #             new_width = int(self.rect.width * 1.5)
-    #             new_height = int(self.rect.height * 1.5)
-    #             new_size = (new_width, new_height)
-                
-    #             self.image = pygame.transform.scale(self.image, new_size)
-    #             self.rect = self.image.get_rect(center=self.rect.center)  # Keep player centered
-                
-    #             # Mark the milestone as reached
-    #             self.reached_milestones.add(milestone)
-                
-    #             print(f"Player ship scaled at score milestone: {milestone}")
-    #             print(f"New player size: {new_size}")
+
         
     #update player sprite
     def update(self):

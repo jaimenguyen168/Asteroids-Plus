@@ -40,24 +40,11 @@ class Powerups(pygame.sprite.Sprite):
             if sprite != self.player:
                 sprite.kill()
 
-    def check_score_and_scale(self):
-        new_size = (int(self.player.rect.width * 1.5), int(self.player.rect.height * 1.5))
-        self.player.image = pygame.transform.scale(self.player.image, new_size)
-        self.player.rect = self.player.image.get_rect(center=self.player.rect.center)
-        # for milestone in self.player.milestones:
-        #     if self.player.score >= milestone and milestone not in self.player.reached_milestones:
-        #         # Increase player ship size
-        #         new_size = (int(self.player.rect.width * 1.5), int(self.player.rect.height * 1.5))
-        #         self.player.image = pygame.transform.scale(self.player.image, new_size)
-        #         self.player.rect = self.player.image.get_rect(center=self.player.rect.center)
-        #         self.player.reached_milestones.add(milestone)
-        #         print("Player size increased to", new_size)
 
     def update(self):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 + (self.rect.centery - self.player.rect.centery) ** 2)
         collision_threshold = max(self.rect.width, self.rect.height) / 2 + max(self.player.rect.width, self.player.rect.height) / 2 - 2 * TILESIZE
 
-        self.check_score_and_scale()
             
         # check if within collision threshold to obtain the powerup
         if distance < collision_threshold:

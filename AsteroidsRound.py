@@ -155,12 +155,10 @@ class Game:
             powerup.update()
 
         for milestone in self.milestones:
-            if self.player.score >= milestone and milestone not in self.reached_milestones:
-                powerup = Powerups(self.all_sprites, self.player)
-                self.all_sprites.add(powerup)
-                self.powerups.add(powerup)
-                self.reached_milestones.add(milestone)
-                print("Powerup spawned new milestone reached")
+            if self.player.score >= milestone:
+                new_size = (int(self.player.rect.width * 1.5), int(self.player.rect.height * 1.5))
+                self.player.image = pygame.transform.scale(self.player.image, new_size)
+                self.player.rect = self.player.image.get_rect(center=self.player.rect.center)
 
         # create the ship based on time interval
         if self.spawn_timer_ship >= self.spawn_delay_ship * FPS:
