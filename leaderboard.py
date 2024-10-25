@@ -64,7 +64,7 @@ class LeaderBoard():
         self.clock.tick(FPS) #update the screen based on FPS
         pygame.mouse.set_visible(True)
         
-        self.back_Button.draw(self.screen, BLACK)
+        self.back_Button.draw(self.screen, (128,128,128))
         
         title_surface = self.font.render("Leaderboard", True, WHITE)
         title_rect = title_surface.get_rect(center=(screen.get_width() // 2, 50))

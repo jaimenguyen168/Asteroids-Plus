@@ -52,9 +52,9 @@ class ShipSelection:
         elif self.selection == 3:
             self.screen.blit(SHIP_D_BUTTON[self.frame], (WIN_WIDTH/2 - 100 ,WIN_HEIGHT/2 - 150))
             
-        self.next_Button.draw(self.screen, BLACK)
-        self.prev_Button.draw(self.screen, BLACK)
-        self.select_Button.draw(self.screen, BLACK)
+        self.next_Button.draw(self.screen, (128,128,128))
+        self.prev_Button.draw(self.screen, (128,128,128))
+        self.select_Button.draw(self.screen, (128,128,128))
 
         pygame.display.update()
 
