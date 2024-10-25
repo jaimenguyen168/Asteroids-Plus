@@ -50,6 +50,8 @@ class Game:
         # update all variables
         self.spawn_timer_powerup = 0
 
+        self.milestones = [20, 400, 1000]  # Define score milestones for scaling the ship
+        self.reached_milestones = set()
     def new(self):
         
         #new game
@@ -151,7 +153,13 @@ class Game:
         for powerup in self.powerups:
             powerup.update()
 
+        for milestone in self.milestones:
+            if self.player.score >= milestone:
+                new_size = (int(self.player.rect.width * 1.5), int(self.player.rect.height * 1.5))
+                self.player.image = pygame.transform.scale(self.player.image, new_size)
+                self.player.rect = self.player.image.get_rect(center=self.player.rect.center)
         # create the ship based on time interval
+
         if self.spawn_timer_ship >= self.spawn_delay_ship * FPS:
             self.spawn_timer_ship = 0
             self.spawn_ship()
